@@ -1,0 +1,17 @@
+- arctic
+- codegemma-7b
+- fuyu-8b
+- gemma-7b
+- llama-3.1-405b
+- llama-3.1-70b
+- llama-3.1-8b
+- llama2-70b
+- llama3-70b
+- llama3-8b
+- mistral-large
+- mistralai_mixtral-8x7b-instruct-v0.1
+- mixtral-8x22b-instruct-v0.1
+- nemotron-4-340b-instruct
+- phi-3-medium-128k-instruct
+- phi-3-mini-128k-instruct
+- recurrentgemma-2b

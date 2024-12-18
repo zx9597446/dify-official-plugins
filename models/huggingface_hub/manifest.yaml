@@ -1,0 +1,33 @@
+version: 0.0.1
+type: plugin
+author: langgenius
+name: huggingface_hub
+icon: icon_s_en.svg
+label:
+  en_US: huggingface_hub
+created_at: 2024-10-03T13:24:25.926342242-04:00
+resource:
+  memory: 268435456
+  permission:
+    tool:
+      enabled: true
+    model:
+      enabled: true
+      llm: true
+      text_embedding: true
+      rerank: false
+      tts: false
+      speech2text: false
+      moderation: false
+plugins:
+  models:
+    - "provider/huggingface_hub.yaml"
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.10"
+    entrypoint: main
