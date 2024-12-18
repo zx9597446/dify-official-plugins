@@ -1,8 +1,7 @@
 ## Slack Bot
 
 **Author:** Langgenius  
-**Version:** 0.0.1  
-**Date:** 2024-12-17 11:05:59.151918 &#43;0800 CST m=&#43;454.732196626  
+**Version:** 0.0.1
 **Type:** extension
 
 ### Description
