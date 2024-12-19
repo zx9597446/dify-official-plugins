@@ -28,7 +28,9 @@ class OpenaiCompatible(Endpoint):
                 def generator():
                     response = self.session.app.chat.invoke(
                         app_id=app_id,
-                        inputs={},
+                        inputs={
+                            "messages": json.dumps(messages),
+                        },
                         query=query,
                         response_mode="streaming",
                         conversation_id=conversation_id,
@@ -48,7 +50,9 @@ class OpenaiCompatible(Endpoint):
             else:
                 response = self.session.app.chat.invoke(
                     app_id=app_id,
-                    inputs={},
+                    inputs={
+                        "messages": json.dumps(messages),
+                    },
                     query=query,
                     response_mode="blocking",
                     conversation_id=conversation_id,
