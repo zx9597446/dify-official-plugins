@@ -1,16 +1,14 @@
-from typing import Any
-from dify_plugin import Tool
+from typing import Any, Generator
 from dify_plugin.entities.tool import ToolInvokeMessage
+from dify_plugin import Tool
+
 from .firecrawl_appx import FirecrawlApp
 
 
 class CrawlJobTool(Tool):
-    def _invoke(
-        self, user_id: str, tool_parameters: dict[str, Any]
-    ) -> ToolInvokeMessage:
+    def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[ToolInvokeMessage, None, None]:
         app = FirecrawlApp(
-            api_key=self.runtime.credentials["firecrawl_api_key"],
-            base_url=self.runtime.credentials["base_url"],
+            api_key=self.runtime.credentials["firecrawl_api_key"], base_url=self.runtime.credentials["base_url"]
         )
         operation = tool_parameters.get("operation", "get")
         if operation == "get":
@@ -19,5 +17,4 @@ class CrawlJobTool(Tool):
             result = app.cancel_crawl_job(job_id=tool_parameters["job_id"])
         else:
             raise ValueError(f"Invalid operation: {operation}")
-
-        return self.create_json_message(result)
+        yield self.create_json_message(result)
