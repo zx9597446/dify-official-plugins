@@ -22,11 +22,9 @@ label:
   en_US: Vertex AI | Google Cloud Platform
 models:
   llm:
-    position: models/llm/_position.yaml
     predefined:
     - models/llm/*.yaml
   text_embedding:
-    position: models/text_embedding/_position.yaml
     predefined:
     - models/text_embedding/*.yaml
 provider: vertex_ai
