@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from datetime import datetime
 from typing import Any, Union
 import pandas as pd
@@ -9,15 +10,16 @@ from dify_plugin import Tool
 
 class YahooFinanceAnalyticsTool(Tool):
     def _invoke(
-        self, user_id: str, tool_parameters: dict[str, Any]
-    ) -> Union[ToolInvokeMessage, list[ToolInvokeMessage]]:
+        self, tool_parameters: dict[str, Any]
+    ) -> Generator[ToolInvokeMessage, None, None]:
         """
         invoke tools
         """
         symbol = tool_parameters.get("symbol", "")
         if not symbol:
-            return self.create_text_message("Please input symbol")
-        time_range = [None, None]
+            yield self.create_text_message("Please input symbol")
+            return
+        time_range = ['', '']
         start_date = tool_parameters.get("start_date", "")
         if start_date:
             time_range[0] = start_date
@@ -57,6 +59,6 @@ class YahooFinanceAnalyticsTool(Tool):
             summary_data.append(segment_summary)
         summary_df = pd.DataFrame(summary_data)
         try:
-            return self.create_text_message(str(summary_df.to_dict()))
+            yield self.create_json_message(summary_df.to_dict())
         except (HTTPError, ReadTimeout):
-            return self.create_text_message("There is a internet connection problem. Please try again later.")
+            yield self.create_text_message("There is a internet connection problem. Please try again later.")
