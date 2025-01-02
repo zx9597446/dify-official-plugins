@@ -1,3 +1,4 @@
+from enum import StrEnum
 import json
 import random
 import uuid
@@ -6,8 +7,20 @@ import httpx
 from websocket import WebSocket
 from yarl import URL
 
-from core.file.file_manager import download
-from core.file.models import File
+
+class FileType(StrEnum):
+    IMAGE = "image"
+    DOCUMENT = "document"
+    AUDIO = "audio"
+    VIDEO = "video"
+    CUSTOM = "custom"
+
+    @staticmethod
+    def value_of(value):
+        for member in FileType:
+            if member.value == value:
+                return member
+        raise ValueError(f"No matching enum found for value '{value}'")
 
 
 class ComfyUiClient:
@@ -26,14 +39,11 @@ class ComfyUiClient:
         )
         return response.content
 
-    def upload_image(self, image_file: File) -> dict:
-        file = download(image_file)
-        files = {"image": (image_file.filename, file, image_file.mime_type), "overwrite": "true"}
-        res = httpx.post(str(self.base_url / "upload/image"), files=files)
-        return res.json()
-
     def queue_prompt(self, client_id: str, prompt: dict) -> str:
-        res = httpx.post(str(self.base_url / "prompt"), json={"client_id": client_id, "prompt": prompt})
+        res = httpx.post(
+            str(self.base_url / "prompt"),
+            json={"client_id": client_id, "prompt": prompt},
+        )
         prompt_id = res.json()["prompt_id"]
         return prompt_id
 
@@ -44,10 +54,14 @@ class ComfyUiClient:
         ws.connect(ws_address)
         return ws, client_id
 
-    def set_prompt_by_ksampler(self, origin_prompt: dict, positive_prompt: str, negative_prompt: str = "") -> dict:
+    def set_prompt_by_ksampler(
+        self, origin_prompt: dict, positive_prompt: str, negative_prompt: str = ""
+    ) -> dict:
         prompt = origin_prompt.copy()
         id_to_class_type = {id: details["class_type"] for id, details in prompt.items()}
-        k_sampler = [key for key, value in id_to_class_type.items() if value == "KSampler"][0]
+        k_sampler = [
+            key for key, value in id_to_class_type.items() if value == "KSampler"
+        ][0]
         positive_input_id = prompt.get(k_sampler)["inputs"]["positive"][0]
         prompt.get(positive_input_id)["inputs"]["text"] = positive_prompt
 
@@ -57,16 +71,22 @@ class ComfyUiClient:
 
         return prompt
 
-    def set_prompt_images_by_ids(self, origin_prompt: dict, image_names: list[str], image_ids: list[str]) -> dict:
+    def set_prompt_images_by_ids(
+        self, origin_prompt: dict, image_names: list[str], image_ids: list[str]
+    ) -> dict:
         prompt = origin_prompt.copy()
         for index, image_node_id in enumerate(image_ids):
             prompt[image_node_id]["inputs"]["image"] = image_names[index]
         return prompt
 
-    def set_prompt_images_by_default(self, origin_prompt: dict, image_names: list[str]) -> dict:
+    def set_prompt_images_by_default(
+        self, origin_prompt: dict, image_names: list[str]
+    ) -> dict:
         prompt = origin_prompt.copy()
         id_to_class_type = {id: details["class_type"] for id, details in prompt.items()}
-        load_image_nodes = [key for key, value in id_to_class_type.items() if value == "LoadImage"]
+        load_image_nodes = [
+            key for key, value in id_to_class_type.items() if value == "LoadImage"
+        ]
         for load_image, image_name in zip(load_image_nodes, image_names):
             prompt.get(load_image)["inputs"]["image"] = image_name
         return prompt
@@ -100,12 +120,24 @@ class ComfyUiClient:
                     for itm in data["nodes"]:
                         if itm not in finished_nodes:
                             finished_nodes.append(itm)
-                            print("Progress: ", len(finished_nodes), "/", len(node_ids), " Tasks done")
+                            print(
+                                "Progress: ",
+                                len(finished_nodes),
+                                "/",
+                                len(node_ids),
+                                " Tasks done",
+                            )
                 if message["type"] == "executing":
                     data = message["data"]
                     if data["node"] not in finished_nodes:
                         finished_nodes.append(data["node"])
-                        print("Progress: ", len(finished_nodes), "/", len(node_ids), " Tasks done")
+                        print(
+                            "Progress: ",
+                            len(finished_nodes),
+                            "/",
+                            len(node_ids),
+                            " Tasks done",
+                        )
 
                     if data["node"] is None and data["prompt_id"] == prompt_id:
                         break  # Execution is done
@@ -121,7 +153,9 @@ class ComfyUiClient:
             images = []
             for output in history["outputs"].values():
                 for img in output.get("images", []):
-                    image_data = self.get_image(img["filename"], img["subfolder"], img["type"])
+                    image_data = self.get_image(
+                        img["filename"], img["subfolder"], img["type"]
+                    )
                     images.append(image_data)
             return images
         finally:
