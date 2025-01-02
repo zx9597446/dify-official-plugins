@@ -21,10 +21,10 @@ identity:
     zh_CN: FAL
   name: fal
   tags:
-  - image
+    - image
 tools:
-- tools/flux_1_pro_new.yaml
-- tools/flux_1_1_pro_ultra.yaml
-- tools/flux_1_dev.yaml
-- tools/flux_1_1_pro.yaml
-- tools/wizper.yaml
+  - tools/flux_1_pro_new.yaml
+  - tools/flux_1_1_pro_ultra.yaml
+  - tools/flux_1_dev.yaml
+  - tools/flux_1_1_pro.yaml
+  - tools/wizper.yaml
