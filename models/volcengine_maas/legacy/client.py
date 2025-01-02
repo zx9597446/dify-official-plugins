@@ -2,17 +2,18 @@ import re
 from collections.abc import Callable, Generator
 from typing import cast
 
-from dify_plugin.entities.model.message import (AssistantPromptMessage,
-                                                ImagePromptMessageContent,
-                                                PromptMessage,
-                                                PromptMessageContentType,
-                                                PromptMessageTool,
-                                                SystemPromptMessage,
-                                                ToolPromptMessage,
-                                                UserPromptMessage)
-
-from .errors import wrap_error
-from .volc_sdk import ChatRole, MaasError, MaasService
+from dify_plugin.entities.model.message import (
+    AssistantPromptMessage,
+    ImagePromptMessageContent,
+    PromptMessage,
+    PromptMessageContentType,
+    PromptMessageTool,
+    SystemPromptMessage,
+    ToolPromptMessage,
+    UserPromptMessage,
+)
+from legacy.errors import wrap_error
+from legacy.volc_sdk import ChatRole, MaasError, MaasService
 
 
 class MaaSClient(MaasService):
@@ -67,7 +68,12 @@ class MaaSClient(MaasService):
                 content = []
                 for message_content in message.content:
                     if message_content.type == PromptMessageContentType.TEXT:
-                        raise ValueError("Content object type only support image_url")
+                        content.append(
+                            {
+                                "type": "text",
+                                "text": message_content.data,
+                            }
+                        )
                     elif message_content.type == PromptMessageContentType.IMAGE:
                         message_content = cast(ImagePromptMessageContent, message_content)
                         image_data = re.sub(r"^data:image\/[a-zA-Z]+;base64,", "", message_content.data)
