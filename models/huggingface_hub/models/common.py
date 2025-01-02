@@ -1,5 +1,6 @@
+from huggingface_hub.utils import BadRequestError, HfHubHTTPError  # type: ignore
+
 from dify_plugin.errors.model import InvokeBadRequestError, InvokeError
-from huggingface_hub.utils import BadRequestError, HfHubHTTPError
 
 
 class _CommonHuggingfaceHub:
