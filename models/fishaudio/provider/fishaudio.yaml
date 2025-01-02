@@ -14,9 +14,10 @@ help:
     en_US: Get your API key from Fish Audio
     zh_Hans: 从 Fish Audio 获取你的 API Key
   url:
-    en_US: https://fish.audio/go-api/
+    en_US: https://fish.audio/zh-CN/go-api/api-keys/
 supported_model_types:
   - tts
+  - speech2text
 configurate_methods:
   - predefined-model
 provider_credential_schema:
@@ -76,10 +77,15 @@ provider_credential_schema:
             zh_Hans: 标准
 models:
   tts:
+    position: models/tts/_position.yaml
     predefined:
       - "models/tts/*.yaml"
+  speech2text:
+    predefined:
+      - "models/speech2text/*.yaml"
 extra:
   python:
     provider_source: provider/fishaudio.py
     model_sources:
       - "models/tts/tts.py"
+      - "models/speech2text/speech2text.py"
