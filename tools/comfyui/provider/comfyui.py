@@ -12,7 +12,9 @@ class ComfyUIProvider(ToolProvider):
         ws_address = f"ws://{base_url.authority}/ws?clientId=test123"
         try:
             ws.connect(ws_address)
-        except Exception as e:
-            raise ToolProviderCredentialValidationError(f"can not connect to {ws_address}")
+        except Exception:
+            raise ToolProviderCredentialValidationError(
+                f"can not connect to {ws_address}"
+            )
         finally:
             ws.close()
