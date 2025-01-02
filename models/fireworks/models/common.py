@@ -1,15 +1,16 @@
-from collections.abc import Mapping
-
 import openai
-from dify_plugin.errors.model import (InvokeAuthorizationError,
-                                      InvokeBadRequestError,
-                                      InvokeConnectionError, InvokeError,
-                                      InvokeRateLimitError,
-                                      InvokeServerUnavailableError)
+from dify_plugin.errors.model import (
+    InvokeError,
+    InvokeAuthorizationError,
+    InvokeBadRequestError,
+    InvokeConnectionError,
+    InvokeRateLimitError,
+    InvokeServerUnavailableError,
+)
 
 
-class _CommonFireworks:
-    def _to_credential_kwargs(self, credentials: Mapping) -> dict:
+class CommonFireworks:
+    def _to_credential_kwargs(self, credentials: dict) -> dict:
         """
         Transform credentials to kwargs for model instance
 
@@ -38,7 +39,10 @@ class _CommonFireworks:
             InvokeConnectionError: [openai.APIConnectionError, openai.APITimeoutError],
             InvokeServerUnavailableError: [openai.InternalServerError],
             InvokeRateLimitError: [openai.RateLimitError],
-            InvokeAuthorizationError: [openai.AuthenticationError, openai.PermissionDeniedError],
+            InvokeAuthorizationError: [
+                openai.AuthenticationError,
+                openai.PermissionDeniedError,
+            ],
             InvokeBadRequestError: [
                 openai.BadRequestError,
                 openai.NotFoundError,
