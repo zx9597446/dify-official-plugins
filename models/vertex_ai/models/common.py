@@ -1,7 +1,6 @@
 from dify_plugin.errors.model import InvokeError
 
-
-class _CommonVertexAi:
+class CommonVertexAi:
     @property
     def _invoke_error_mapping(self) -> dict[type[InvokeError], list[type[Exception]]]:
         """
@@ -12,4 +11,4 @@ class _CommonVertexAi:
 
         :return: Invoke error mapping
         """
-        pass
+        raise NotImplementedError
