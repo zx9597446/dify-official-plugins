@@ -20,8 +20,8 @@ class Fishaudio(Tool):
         try:
             data = self._tts(content, voice_id, audio_format)
             yield self.create_blob_message(blob=data, meta={"mime_type": f"audio/{audio_format}"})
-        except Exception:
-            yield self.create_text_message("Text to speech service error, please check the network")
+        except Exception as e:
+            yield self.create_text_message(f"Text to speech service error, please check the network; error: {e}")
         
     def _tts(self, content: str, voice_id: str, audio_format: str) -> bytes:
         api_key = self.runtime.credentials.get("api_key")

@@ -45,16 +45,18 @@ class FishAudio():
             reference_id=voice,
             latency=latency,
         )
-        with httpx.stream(
-                "POST",
-                self.url_base + "/v1/tts",
-                content=ormsgpack.packb(request, option=ormsgpack.OPT_SERIALIZE_PYDANTIC),
-                headers=self.headers(),
-                timeout=None,
-        ) as response:
-            if response.status_code != 200:
-                raise InvokeBadRequestError(f"Error: {response.status_code} - {response.text}")
-            yield from response.iter_bytes()
+        try:
+            with httpx.stream(
+                    "POST",
+                    self.url_base + "/v1/tts",
+                    content=ormsgpack.packb(request, option=ormsgpack.OPT_SERIALIZE_PYDANTIC),
+                    headers=self.headers(),
+                    timeout=None,
+            ) as response:
+                response.raise_for_status()
+                yield from response.iter_bytes()
+        except httpx.HTTPStatusError as e:
+            raise InvokeBadRequestError(f"{e.response.status_code} - {str(e)}")
 
     def model_list(self, page_number):
         params = {
