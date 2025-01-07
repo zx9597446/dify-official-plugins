@@ -56,16 +56,6 @@ jobs:
             exit 1
           fi
 
-      - name: Check Plugin Deps
-        run: |
-          if [ -f ${{ env.PLUGIN_PATH }}/requirements.txt ]; then
-            echo "Trying to install plugin dependencies..."
-            python3 -m venv .venv
-            source .venv/bin/activate
-            python3 -m pip install -r ${{ env.PLUGIN_PATH }}/requirements.txt
-            deactivate
-          fi
-
       - name: Upload Plugin
         if: env.PLUGIN_PATH != ''
         run: |

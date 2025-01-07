@@ -16,6 +16,9 @@ on:
 
 env:
   REPO_NAME: langgenius/dify-official-plugins
+  MARKETPLACE_BASE_URL: https://marketplace-plugin.dify.dev
+  MARKETPLACE_TOKEN: placeholder
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   pre-check-plugin:
@@ -25,8 +28,6 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Download Plugin Daemon
-        env:
-          GH_TOKEN: ${{ secrets.ORG_SCOPE_GITHUB_TOKEN }}
         run: |
           gh release download -R langgenius/dify-plugin-daemon --pattern "dify-plugin-linux-amd64" --dir .scripts
           chmod +x .scripts/dify-plugin-linux-amd64
@@ -45,8 +46,6 @@ jobs:
         uses: mikefarah/yq@v4.44.5
 
       - name: Get PR Path
-        env:
-          GH_TOKEN: ${{ secrets.ORG_SCOPE_GITHUB_TOKEN }}
         run: |
           export PR_FILES=$(gh pr view -R ${{ env.REPO_NAME }} ${{ github.event.pull_request.number }} --json files --jq .files)
 
@@ -86,4 +85,4 @@ jobs:
 
       - name: Check Packaging
         run: |
-          python3 .scripts/upload-package.py -d ${{ env.PLUGIN_PATH }} -t ${{ secrets.MARKETPLACE_TOKEN }} --plugin-daemon-path .scripts/dify-plugin-linux-amd64 -u ${{ secrets.MARKETPLACE_BASE_URL }} -f --test
+          python3 .scripts/upload-package.py -d ${{ env.PLUGIN_PATH }} -t ${{ env.MARKETPLACE_TOKEN }} --plugin-daemon-path .scripts/dify-plugin-linux-amd64 -u ${{ env.MARKETPLACE_BASE_URL }} -f --test
