@@ -1,4 +1,3 @@
-credentials_for_provider: null
 extra:
   python:
     source: provider/feishu.py
