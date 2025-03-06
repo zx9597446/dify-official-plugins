@@ -1,6 +1,6 @@
-version: 0.0.5
+version: 0.0.6
 type: plugin
-author: aws
+author: langgenius
 name: amazon-bedrock
 label:
   en_US: Amazon Bedrock
@@ -28,7 +28,7 @@ plugins:
   models:
     - provider/amazon-bedrock.yaml
 meta:
-  version: 0.0.5
+  version: 0.0.6
   arch:
     - amd64
     - arm64
