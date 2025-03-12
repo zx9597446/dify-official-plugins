@@ -1,0 +1,99 @@
+description:
+  human:
+    en_US: Search the web and get content from search results.
+    zh_Hans: 搜索网页并获取搜索结果的内容。
+  llm: This tool combines web search (SERP) with scraping capabilities to return full page content for any query.
+extra:
+  python:
+    source: tools/search.py
+identity:
+  author: ahasasjeb
+  label:
+    en_US: Search
+    zh_Hans: 搜索
+  name: search
+parameters:
+- form: llm
+  human_description:
+    en_US: The search query to look for on the web.
+    zh_Hans: 在网上搜索的查询词。
+  label:
+    en_US: Search Query
+    zh_Hans: 搜索查询
+  llm_description: The search query to be used. This is a required parameter.
+  name: query
+  required: true
+  type: string
+- form: form
+  human_description:
+    en_US: Maximum number of results to return (1-10).
+    zh_Hans: 返回的最大结果数量（1-10）。
+  label:
+    en_US: Result Limit
+    zh_Hans: 结果数量限制
+  name: limit
+  min: 1
+  max: 10
+  type: number
+  default: 5
+- form: form
+  human_description:
+    en_US: Time-based search parameter.
+    zh_Hans: 基于时间的搜索参数。
+  label:
+    en_US: Time-Based Search
+    zh_Hans: 基于时间的搜索
+  name: tbs
+  type: string
+- form: form
+  human_description:
+    en_US: Language code for search results (e.g., en, fr, es).
+    zh_Hans: 搜索结果的语言代码（例如，en, fr, es）。
+  label:
+    en_US: Language
+    zh_Hans: 语言
+  name: lang
+  type: string
+  default: en
+- form: form
+  human_description:
+    en_US: Country code for search results (e.g., us, uk, ca).
+    zh_Hans: 搜索结果的国家代码（例如，us, uk, ca）。
+  label:
+    en_US: Country
+    zh_Hans: 国家
+  name: country
+  type: string
+  default: us
+- form: form
+  human_description:
+    en_US: Location parameter for search results.
+    zh_Hans: 搜索结果的位置参数。
+  label:
+    en_US: Location
+    zh_Hans: 位置
+  name: location
+  type: string
+- form: form
+  human_description:
+    en_US: Timeout in milliseconds for the request.
+    zh_Hans: 请求的超时时间（以毫秒为单位）。
+  label:
+    en_US: Timeout
+    zh_Hans: 超时时间
+  min: 0
+  name: timeout
+  type: number
+  default: 60000
+- form: form
+  human_description:
+    en_US: 'Formats to include in the output. Available options: markdown, html, rawHtml, links, screenshot, screenshot@fullPage, extract. Use this to get complete content from search results.'
+    zh_Hans: '输出中应包含的格式。可选项：markdown, html, rawHtml, links, screenshot, screenshot@fullPage, extract。使用此选项获取搜索结果的完整内容。'
+  label:
+    en_US: Content Formats
+    zh_Hans: 内容格式
+  name: formats
+  placeholder:
+    en_US: Use commas to separate multiple formats
+    zh_Hans: 多个格式时使用半角逗号分隔
+  type: string
